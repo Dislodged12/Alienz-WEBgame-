@@ -1,0 +1,169 @@
+<html>
+<head>
+	<title>Space</title>
+</head>
+<body>
+<h1 id="p1" style="color: white;font-family:sans-serif;background-color:black;width:1000px;padding-bottom:50px;margin-bottom:-22;">Planet: Zoidrath</h1>
+<canvas id="myCanvas" width="1000" height="700"></canvas> 
+<h1 id="h2" style="color: white;font-family:sans-serif;background-color:black;width:1000px;padding-bottom:50px;margin-bottom:-22;">Health: </h1>
+<script>
+var p1H = 35;
+var p1W = 35;
+var p1X = 0;
+var p1Y = 660;
+var p1S = 5;
+thrust = "100";
+thrustU = "1";
+
+p2H = 35;
+p2W = 35;
+p2Y = 640;
+p2X = 100;
+alS = 5;
+
+hW = 50;
+dmg = 1;
+dmg2 = 200;
+rgn = 500;
+
+planet = "Zungderas";
+diff = "Easy";
+
+var p1p = 0;
+
+var p1 = document.getElementById("p1");
+p1.innerHTML = "Planet: " + planet + " " + " " + "Difficulty: " + diff;
+
+var c = document.getElementById("myCanvas");
+var ctx = c.getContext("2d");
+
+var bgclr2 = ctx.fillStyle = "black";
+
+function draw(e){
+var bgclr = ctx.fillStyle = 'black';
+var bg = ctx.fillRect(0, 0, c.width, c.height, bgclr);
+
+var clr = ctx.fillStyle = 'gray';
+var p1 = ctx.fillRect(p1X, p1Y, p1W, p1H, clr);
+
+var clr2 = ctx.fillStyle = 'lime';
+var al = ctx.fillRect(p2X, p2Y, p2W, p2H, clr2);
+
+var gry = ctx.fillStyle = 'gray';
+var aih1 = ctx.fillRect(p2X - 7, p2Y - 20, hW, 10, gry);
+var rd = ctx.fillStyle = 'red';
+var aih2 = ctx.fillRect(p2X - 7, p2Y - 20, hW, 10, rd);
+}
+
+bX = p1X
+
+/*function shootleft(){
+for(var i = 0; i < 10; i++){
+bX -= 1;
+}
+}*/
+
+window.onkeydown = function(e) {
+var key = e.keyCode ? e.keyCode : e.which;
+
+if (key == 38) {
+if(thrust > 0){
+       p1Y -= p1S;
+thrust -= thrustU;
+}
+if(p1Y < 0){
+p1Y = 0;
+	}
+}
+
+
+if (key == 39) {
+       p1X += p1S;
+if(p1X > 965){
+p1X = 965;
+	}
+}
+
+if (key == 37) {
+       p1X -= p1S;
+if(p1X < 0){
+p1X = 0;
+	}
+}
+
+/*if (key == 188) {
+var ylw = ctx.fillStyle = 'yellow';
+var blt = ctx.fillRect(bX, p1Y,5, 5, ylw);
+shootleft();
+}*/
+
+}
+
+function clear(){
+ctx.clearRect(0, 0, c.width, c.height);
+}
+
+function gravity(){
+if(p1Y <= 660){
+p1Y += p1S;
+}
+if(p2Y <= 660){
+p2Y += alS;
+}
+}
+
+function ai(){
+if(p1X < p2X){
+p2X -= alS;
+}
+if(p1X > p2X){
+p2X += alS;
+}
+if(p1Y < p2Y){
+p2Y -= alS;
+}
+}
+
+
+var hlth = 100;
+
+function collide(){
+if (p2X < p1X + p1W &&
+   p2X + p2W > p1X &&
+   p2Y < p1Y + p1H &&
+   p2H + p2Y > p1Y) {
+    hlth -= dmg;
+}
+if(hlth < 0){
+hlth = 0;
+}
+var health = document.getElementById("h2");
+health.innerHTML = "Health: " + hlth + " " + "Thrust: " + thrust + "%";
+
+if(hlth == 0){
+p1X = 0;
+p1Y = 0;
+hlth = 100;
+}
+}
+
+function regen(){
+hlth += 1;
+if(hlth > 100){
+hlth = 100;
+}
+thrust += 1;
+if(thrust > 100){
+thrust = 100;
+}
+}
+
+setInterval(draw, 10);
+setInterval(collide, dmg2);
+setInterval(regen, rgn);
+setInterval(ai, 200);
+setInterval(gravity, 100);
+setInterval(clear, 10000);
+</script>
+</body>
+</html>
